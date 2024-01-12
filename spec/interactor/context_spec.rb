@@ -5,14 +5,14 @@ module Interactor
         context = Context.build(foo: "bar")
 
         expect(context).to be_a(Context)
-        expect(context.foo).to eq("bar")
+        expect(context[:foo]).to eq("bar")
       end
 
       it "builds an empty context if no hash is given" do
         context = Context.build
 
         expect(context).to be_a(Context)
-        expect(context.send(:table)).to eq({})
+        expect(context.keys).to eq([])
       end
 
       it "doesn't affect the original hash" do
@@ -21,7 +21,7 @@ module Interactor
 
         expect(context).to be_a(Context)
         expect {
-          context.foo = "baz"
+          context[:foo] = "baz"
         }.not_to change {
           hash[:foo]
         }
@@ -33,9 +33,9 @@ module Interactor
 
         expect(context2).to be_a(Context)
         expect {
-          context2.foo = "baz"
+          context2[:foo] = "baz"
         }.to change {
-          context1.foo
+          context1[:foo]
         }.from("bar").to("baz")
       end
     end
@@ -109,7 +109,7 @@ module Interactor
             nil
           end
         }.not_to change {
-          context.foo
+          context[:foo]
         }
       end
 
@@ -121,7 +121,7 @@ module Interactor
             nil
           end
         }.to change {
-          context.foo
+          context[:foo]
         }.from("bar").to("baz")
       end
 
@@ -133,7 +133,7 @@ module Interactor
             nil
           end
         }.to change {
-          context.foo
+          context[:foo]
         }.from("bar").to("baz")
       end
 

@@ -1,5 +1,3 @@
-require "ostruct"
-
 module Interactor
   # Public: The object for tracking state of an Interactor's invocation. The
   # context is used to initialize the interactor with the information required
@@ -28,7 +26,23 @@ module Interactor
   #   # => "baz"
   #   context
   #   # => #<Interactor::Context foo="baz" hello="world">
-  class Context < OpenStruct
+  class Context
+    def initialize(context = {})
+      @context = context
+    end
+
+    def [](key)
+      @context[key]
+    end
+
+    def []=(key, value)
+      @context[key] = value
+    end
+
+    def keys
+      @context.keys
+    end
+
     # Internal: Initialize an Interactor::Context or preserve an existing one.
     # If the argument given is an Interactor::Context, the argument is returned.
     # Otherwise, a new Interactor::Context is initialized from the provided
@@ -53,7 +67,7 @@ module Interactor
     #
     # Returns the Interactor::Context.
     def self.build(context = {})
-      self === context ? context : new(context)
+      self === context ? context : new(context.dup)
     end
 
     # Public: Whether the Interactor::Context is successful. By default, a new
